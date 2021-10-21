@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as fg from 'fast-glob';
+import * as fs from 'fs';
 import { CHECK_NAME, EXTENSIONS_TO_LINT } from './constants';
 import { eslint } from './eslint-cli';
 
@@ -47,8 +49,17 @@ async function run() {
   // console.log('Commit from GraphQL:', currentSha);
   const files = prInfo.repository.pullRequest.files.nodes;
 
+  let ignoredFiles = [];
+  if (fs.existsSync('.eslintignore')) {
+    let ignoreContents = fs.readFileSync('.eslintignore', 'utf-8');
+    // @ts-ignore
+    ignoredFiles = fg.sync(ignoreContents.split("\n").map(l => l.trim()), {dot:true});
+  }
+
   const filesToLint = files
-    .filter(f => EXTENSIONS_TO_LINT.has(path.extname(f.path)))
+    .filter((f) => EXTENSIONS_TO_LINT.has(path.extname(f.path)) &&
+        // @ts-ignore
+        ignoredFiles.indexOf(f) === -1)
     .map(f => f.path);
   if (filesToLint.length < 1) {
     console.warn(
