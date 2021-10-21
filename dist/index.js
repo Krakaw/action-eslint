@@ -63,6 +63,7 @@ async function eslint(filesList) {
     // fixableErrorCount, fixableWarningCount are available too
     const { results, errorCount, warningCount } = report;
     const annotations = [];
+    console.log(results);
     for (const result of results) {
         const { filePath, messages } = result;
         const filename = filteredFilesList.find(file => filePath.endsWith(file));

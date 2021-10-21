@@ -24,6 +24,7 @@ export async function eslint(filesList: string[]) {
 
   const annotations: any[] = [];
 
+  console.log(results)
   for (const result of results) {
 
     const { filePath, messages } = result;
