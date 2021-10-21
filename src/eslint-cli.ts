@@ -50,6 +50,10 @@ export async function eslint(filesList: string[]) {
       });
     }
   }
+  if (annotations.length > 50) {
+    console.warn(annotations.length,' annotations found, only showing the first 50')
+    annotations.splice(49 );
+  }
 
   return {
     conclusion: (errorCount > 0
