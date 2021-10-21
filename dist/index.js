@@ -175,7 +175,7 @@ async function run() {
         let ignoreContents = fs.readFileSync('.eslintignore', 'utf-8');
         console.log('file contents', ignoreContents);
         // @ts-ignore
-        ignoredFiles = fg.sync(ignoreContents.split("\n").map(l => l.trim()).filter(l => l !== ''), { dot: true });
+        ignoredFiles = fg.sync(ignoreContents.split("\n").map(l => l.trim().replace(/^\//, '')).filter(l => l !== ''), { dot: true });
         console.log('ignoreFiles', ignoredFiles);
     }
     const filesToLint = files
