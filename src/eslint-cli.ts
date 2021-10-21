@@ -24,6 +24,10 @@ export async function eslint(filesList: string[]) {
 
   const annotations: any[] = [];
   for (const result of results) {
+    if (annotations.length >= 50) {
+      console.warn('Only showing the first 50 of', results.length,'problems');
+      break;
+    }
     const { filePath, messages } = result;
     const filename = filteredFilesList.find(file => filePath.endsWith(file));
     if (!filename) continue;
@@ -49,10 +53,6 @@ export async function eslint(filesList: string[]) {
         message
       });
     }
-  }
-  if (annotations.length > 50) {
-    console.warn(annotations.length,' annotations found, only showing the first 50')
-    annotations.splice(49 );
   }
 
   return {
