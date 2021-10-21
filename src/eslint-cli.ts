@@ -24,13 +24,14 @@ export async function eslint(filesList: string[]) {
 
   const annotations: any[] = [];
   for (const result of results) {
+
+    const { filePath, messages } = result;
+    const filename = filteredFilesList.find(file => filePath.endsWith(file));
+    if (!filename) continue;
     if (annotations.length >= 50) {
       console.warn('Only showing the first 50 of', results.length,'problems');
       break;
     }
-    const { filePath, messages } = result;
-    const filename = filteredFilesList.find(file => filePath.endsWith(file));
-    if (!filename) continue;
     for (const msg of messages) {
       const {
         line,
@@ -41,7 +42,10 @@ export async function eslint(filesList: string[]) {
         column,
         endColumn
       } = msg;
-
+      if (annotations.length >= 50) {
+        console.warn('Only showing the first 50 of', results.length,'problems');
+        break;
+      }
       annotations.push({
         path: filename,
         start_line: line || 0,
