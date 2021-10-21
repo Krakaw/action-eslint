@@ -23,13 +23,14 @@ export async function eslint(filesList: string[]) {
   const { results, errorCount, warningCount } = report;
 
   const annotations: any[] = [];
+
   for (const result of results) {
 
     const { filePath, messages } = result;
     const filename = filteredFilesList.find(file => filePath.endsWith(file));
     if (!filename) continue;
     if (annotations.length >= 50) {
-      console.warn('Only showing the first 50 of', results.length,'problems');
+      console.warn('Only showing the first 50 results');
       break;
     }
     for (const msg of messages) {
@@ -43,7 +44,7 @@ export async function eslint(filesList: string[]) {
         endColumn
       } = msg;
       if (annotations.length >= 50) {
-        console.warn('Only showing the first 50 of', results.length,'problems');
+        console.warn('Only showing the first 50 messages');
         break;
       }
       annotations.push({

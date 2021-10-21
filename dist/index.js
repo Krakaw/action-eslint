@@ -69,13 +69,13 @@ async function eslint(filesList) {
         if (!filename)
             continue;
         if (annotations.length >= 50) {
-            console.warn('Only showing the first 50 of', results.length, 'problems');
+            console.warn('Only showing the first 50 results');
             break;
         }
         for (const msg of messages) {
             const { line, severity, ruleId, message, endLine, column, endColumn } = msg;
             if (annotations.length >= 50) {
-                console.warn('Only showing the first 50 of', results.length, 'problems');
+                console.warn('Only showing the first 50 messages');
                 break;
             }
             annotations.push({
