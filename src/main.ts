@@ -60,10 +60,14 @@ async function run() {
   }
 
   const filesToLint = files
-      .filter((f) => EXTENSIONS_TO_LINT.has(path.extname(f.path)) &&
-          // @ts-ignore
-          ignoredFiles.indexOf(f) === -1)
+      .filter((f) => {
+        console.log('file path: ', f.path);
+        return EXTENSIONS_TO_LINT.has(path.extname(f.path));
+      })
       .map(f => f.path);
+
+  console.log('Files to lint: ', filesToLint);
+  console.log('Files to ignore: ', ignoredFiles);
   if (filesToLint.length < 1) {
     console.warn(
         `No files with [${[...EXTENSIONS_TO_LINT].join(
