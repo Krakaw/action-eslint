@@ -54,8 +54,9 @@ export async function eslint(filesList: string[]) {
         start_column: column || 0,
         end_column: endColumn || column || 0,
         annotation_level: 'notice', //ESLINT_TO_GITHUB_LEVELS[severity],
-        title: ruleId || 'ESLint',
-        message
+        title: (ruleId || 'ESLint').substr(0, 255),
+        raw_details: '',
+        message: message.substr(0, 512)
       });
     }
    annotations = annotations.concat(block);
