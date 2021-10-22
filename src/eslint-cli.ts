@@ -53,7 +53,7 @@ export async function eslint(filesList: string[]) {
         end_line: endLine || line || 0,
         start_column: column || 0,
         end_column: endColumn || column || 0,
-        annotation_level: ESLINT_TO_GITHUB_LEVELS[severity],
+        annotation_level: 'notice', //ESLINT_TO_GITHUB_LEVELS[severity],
         title: ruleId || 'ESLint',
         message
       });

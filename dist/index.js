@@ -50,11 +50,11 @@ exports.eslint = void 0;
 const path = __importStar(__nccwpck_require__(5622));
 const fs = __nccwpck_require__(5747);
 const constants_1 = __nccwpck_require__(5105);
-const ESLINT_TO_GITHUB_LEVELS = [
+const ESLINT_TO_GITHUB_LEVELS = (/* unused pure expression or super */ null && ([
     'notice',
     'warning',
     'failure'
-];
+]));
 async function eslint(filesList) {
     const { CLIEngine } = (await Promise.resolve().then(() => __importStar(require(path.join(process.cwd(), 'node_modules/eslint')))));
     const filteredFilesList = filesList.filter((value) => fs.existsSync(value));
@@ -85,7 +85,7 @@ async function eslint(filesList) {
                 end_line: endLine || line || 0,
                 start_column: column || 0,
                 end_column: endColumn || column || 0,
-                annotation_level: ESLINT_TO_GITHUB_LEVELS[severity],
+                annotation_level: 'notice',
                 title: ruleId || 'ESLint',
                 message
             });
