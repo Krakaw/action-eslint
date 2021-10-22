@@ -26,7 +26,7 @@ export async function eslint(filesList: string[]) {
 
   console.log(results)
   for (const result of results) {
-
+    const block: any[] = [];
     const { filePath, messages } = result;
     const filename = filteredFilesList.find(file => filePath.endsWith(file));
     if (!filename) continue;
@@ -48,7 +48,7 @@ export async function eslint(filesList: string[]) {
         console.warn('Only showing the first 50 messages');
         break;
       }
-      annotations.push({
+      block.push({
         path: filename,
         start_line: line || 0,
         end_line: endLine || line || 0,
@@ -59,6 +59,7 @@ export async function eslint(filesList: string[]) {
         message
       });
     }
+    annotations.concat(block);
   }
 
   return {
