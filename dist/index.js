@@ -69,7 +69,7 @@ async function eslint(filesList) {
         const filename = filteredFilesList.find(file => filePath.endsWith(file));
         if (!filename)
             continue;
-        if (annotations.length >= 50) {
+        if (annotations.length + messages.length >= 50) {
             console.warn('Only showing the first 50 results');
             break;
         }
