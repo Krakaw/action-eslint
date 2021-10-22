@@ -7,6 +7,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EXTENSIONS_TO_LINT = exports.CHECK_NAME = void 0;
 exports.CHECK_NAME = 'ESLint Results';
 exports.EXTENSIONS_TO_LINT = new Set([
     '.mjs',
@@ -16,7 +17,6 @@ exports.EXTENSIONS_TO_LINT = new Set([
     '.tsx',
     '.vue'
 ]);
-
 
 
 /***/ }),
@@ -62,9 +62,9 @@ async function eslint(filesList) {
     const report = cli.executeOnFiles(filteredFilesList);
     // fixableErrorCount, fixableWarningCount are available too
     const { results, errorCount, warningCount } = report;
-    const annotations = [];
-    console.log(results);
+    let annotations = [];
     for (const result of results) {
+        const block = [];
         const { filePath, messages } = result;
         const filename = filteredFilesList.find(file => filePath.endsWith(file));
         if (!filename)
@@ -79,7 +79,7 @@ async function eslint(filesList) {
                 console.warn('Only showing the first 50 messages');
                 break;
             }
-            annotations.push({
+            block.push({
                 path: filename,
                 start_line: line || 0,
                 end_line: endLine || line || 0,
@@ -90,6 +90,7 @@ async function eslint(filesList) {
                 message
             });
         }
+        annotations = annotations.concat(block);
     }
     return {
         conclusion: (errorCount > 0
@@ -179,20 +180,18 @@ async function run() {
     // console.log('Commit from GraphQL:', currentSha);
     const files = prInfo.repository.pullRequest.files.nodes;
     let ignoredFiles = [];
-    console.log('Dir', fs.readdirSync('.'));
     if (fs.existsSync('.eslintignore')) {
         let ignoreContents = fs.readFileSync('.eslintignore', 'utf-8');
-        console.log('file contents', ignoreContents);
         // @ts-ignore
         ignoredFiles = fg.sync(ignoreContents.split("\n").map(l => l.trim().replace(/^\//, '')).filter(l => l !== ''), { dot: true });
-        console.log('ignoreFiles', ignoredFiles);
+        console.log('ignoreFiles', JSON.stringify(ignoredFiles, null, 2));
     }
     const filesToLint = files
         .filter((f) => constants_1.EXTENSIONS_TO_LINT.has(path.extname(f.path)) &&
         // @ts-ignore
         ignoredFiles.indexOf(f) === -1)
         .map(f => f.path);
-    console.log('filesToLint', filesToLint);
+    console.log('filesToLint', JSON.stringify(filesToLint, null, 2));
     if (filesToLint.length < 1) {
         console.warn(`No files with [${[...constants_1.EXTENSIONS_TO_LINT].join(', ')}] extensions added or modified in this PR, nothing to lint...`);
         return;
