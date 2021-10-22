@@ -22,9 +22,8 @@ export async function eslint(filesList: string[]) {
   // fixableErrorCount, fixableWarningCount are available too
   const { results, errorCount, warningCount } = report;
 
-  const annotations: any[] = [];
+  let annotations: any[] = [];
 
-  console.log(results)
   for (const result of results) {
     const block: any[] = [];
     const { filePath, messages } = result;
@@ -59,7 +58,7 @@ export async function eslint(filesList: string[]) {
         message
       });
     }
-    annotations.concat(block);
+   annotations = annotations.concat(block);
   }
 
   return {
