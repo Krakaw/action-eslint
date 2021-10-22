@@ -189,7 +189,7 @@ async function run() {
     const filesToLint = files
         .filter((f) => constants_1.EXTENSIONS_TO_LINT.has(path.extname(f.path)) &&
         // @ts-ignore
-        ignoredFiles.indexOf(f) === -1)
+        ignoredFiles.indexOf(f.path) === -1)
         .map(f => f.path);
     console.log('filesToLint', JSON.stringify(filesToLint, null, 2));
     if (filesToLint.length < 1) {
