@@ -53,13 +53,11 @@ async function run() {
   const files = prInfo.repository.pullRequest.files.nodes;
 
   let ignoredFiles = [];
-  console.log('Dir', fs.readdirSync('.'));
   if (fs.existsSync('.eslintignore')) {
     let ignoreContents = fs.readFileSync('.eslintignore', 'utf-8');
-    console.log('file contents', ignoreContents);
     // @ts-ignore
     ignoredFiles = fg.sync(ignoreContents.split("\n").map(l => l.trim().replace(/^\//, '')).filter(l => l !== ''), {dot:true});
-    console.log('ignoreFiles', ignoredFiles);
+    console.log('ignoreFiles', JSON.stringify(ignoredFiles, null, 2));
   }
 
   const filesToLint = files
@@ -67,7 +65,7 @@ async function run() {
           // @ts-ignore
           ignoredFiles.indexOf(f) === -1)
       .map(f => f.path);
-  console.log('filesToLint', filesToLint)
+  console.log('filesToLint', JSON.stringify(filesToLint, null, 2))
   if (filesToLint.length < 1) {
     console.warn(
         `No files with [${[...EXTENSIONS_TO_LINT].join(
